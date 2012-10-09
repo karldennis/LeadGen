@@ -1,0 +1,40 @@
+﻿@model LeadGen.Models.YPSearchListingsJsonResultModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm())
+{
+    <input type="text" name="terms" placeholder="search term" value="@Model.SearchOptions.Terms"/>
+    <input type="text" name="location" placeholder="location" value="@Model.SearchOptions.Location"/>
+    <input type="text" name="radius" placeholder="radius" value="@( Model.SearchOptions.Radius == 0 ? 10 : Model.SearchOptions.Radius )"/>
+    <input type="submit" value="Search"/>
+}
+
+@if (Model.SearchResult != null)
+{
+    <table>
+        <thead><tr>
+                    <th>Industry</th><th>Name</th><th>Email</th><th>Phone</th><th>Website</th><th>YP Page</th>
+                </tr></thead>
+        <tbody>
+
+            @foreach (var listing in Model.SearchResult.SearchListings.SearchListing)
+            {
+            <tr>
+                <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
+                <td data-bind="text: BusinessName">@listing.BusinessName</td>
+                <td data-bind="text: Email">@listing.Email</td>
+                <td data-bind="text: Phone">@listing.Phone</td>
+                <td><a href="@listing.Website"target="_blank">@listing.Website</a></td>
+                <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
+                
+            </tr>
+            }
+        
+        </tbody>
+    </table>
+}
