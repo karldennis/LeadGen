@@ -1,35 +1,53 @@
-﻿@model LeadGen.Models.YPSearchListingsJsonResultModel
+﻿@model LeadGen.Models.SearchViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
 
+
 @Html.ValidationSummary()
 
-@using (Html.BeginForm())
+<h3>Search Criteria:</h3>
+<form action="/" class="form-inline" method="post">
+    <input type="text" name="terms" placeholder="search term/industy (ex: florists)" value="@Model.Terms"/>
+    <input type="text" name="location" placeholder="location (zip or city,state)" value="@Model.Location"/>
+    <input type="text" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
+    <input type="submit" value="Preview" class="btn"/>
+</form>
+
+
+@using (Html.BeginForm("CreateJob", "Home", FormMethod.Post, new {@class="form-inline"}))
 {
-    <input type="text" name="terms" placeholder="search term" value="@Model.SearchOptions.Terms"/>
-    <input type="text" name="location" placeholder="location" value="@Model.SearchOptions.Location"/>
-    <input type="text" name="radius" placeholder="radius" value="@( Model.SearchOptions.Radius == 0 ? 10 : Model.SearchOptions.Radius )"/>
-    <input type="submit" value="Search"/>
+    <input type="text" name="name" placeholder="optional name" />
+    <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>
+    <input type="hidden" name="location" placeholder="location" value="@Model.Location"/>
+    <input type="hidden" name="listingsfound" placeholder="location" value="@Model.ListingsFound"/>
+    <input type="hidden" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
+    <input  type="submit" 
+            value="@(Model.Leads != null && Model.Leads.Any() ? "Create Job" : "Unable to create a job without any results!")" 
+            class="btn @(Model.Leads != null && Model.Leads.Any() ? "" : "disabled")"/>
 }
 
-@if (Model.SearchResult != null)
+<p></p>
+
+@if (Model.Leads != null && Model.Leads.Any())
 {
-    <table>
+    <div class="alert alert-info">
+        @Model.ListingsFound potential leads found, click create a job to start the scraping process.  
+    </div>
+    
+    <table style="width: 100%">
         <thead><tr>
-                    <th>Industry</th><th>Name</th><th>Email</th><th>Phone</th><th>Website</th><th>YP Page</th>
+                    <th>Industry</th><th>Name</th><th>Phone</th><th>YP Page</th>
                 </tr></thead>
         <tbody>
 
-            @foreach (var listing in Model.SearchResult.SearchListings.SearchListing)
+            @foreach (var listing in Model.Leads)
             {
             <tr>
                 <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
                 <td data-bind="text: BusinessName">@listing.BusinessName</td>
-                <td data-bind="text: Email">@listing.Email</td>
                 <td data-bind="text: Phone">@listing.Phone</td>
-                <td><a href="@listing.Website"target="_blank">@listing.Website</a></td>
                 <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
                 
             </tr>

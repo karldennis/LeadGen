@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Web.Mvc;
-using System.Web.Security;
 
 namespace LeadGen.Models
 {
@@ -30,8 +27,7 @@ namespace LeadGen.Models
     public class LogOnModel
     {
         [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
+        public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -44,9 +40,6 @@ namespace LeadGen.Models
 
     public class RegisterModel
     {
-        [Required]
-        [Display(Name = "User name")]
-        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -63,5 +56,8 @@ namespace LeadGen.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name="Invite Key")]
+        public string InviteKey { get; set; }
     }
 }

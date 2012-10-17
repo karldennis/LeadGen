@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="LeadGen.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="1" osVersion="*" schemaVersion="2012-05.1.7">
+  <Role name="LeadGen.ScraperWorker">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <Setting name="LeadgenQueue" value="DefaultEndpointsProtocol=https;AccountName=leadgen;AccountKey=+qeHG2/Z7BwWZyZM38q/yVvMKUl1V20H/X4s6f2vQbD4ll6JksoBGLfH2RfkLe35k0O908OAV9itAm66NFCjWg==" />
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

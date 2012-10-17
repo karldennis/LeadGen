@@ -5,21 +5,25 @@ using System.Web;
 
 namespace LeadGen.Models
 {
-    public class YPSearchListingsJsonResultModel
+    public class YellowPagesSearchListingsJsonResult
     {
-        private SearchOptions _searchOptions;
-        public SearchOptions SearchOptions
+        private SearchResult _searchResult;
+        public SearchResult SearchResult
         {
-            get { return _searchOptions ?? (_searchOptions = new SearchOptions()); }
-            set { _searchOptions = value; }
+            get { return _searchResult ?? (_searchResult = new SearchResult()); }
+            set { _searchResult = value; }
         }
-
-        public SearchResult SearchResult { get; set; }
     }
 
     public class SearchResult
     {
-        public MetaProperties MetaProperties { get; set; }
+        private MetaProperties _metaProperties;
+        public MetaProperties MetaProperties
+        {
+            get { return _metaProperties ?? (_metaProperties = new MetaProperties()); }
+            set { _metaProperties = value; }
+        }
+
         public SearchListings SearchListings { get; set; }
     }
 
@@ -41,6 +45,18 @@ namespace LeadGen.Models
 
     public class MetaProperties
     {
+        public string requestId { get; set; }
+        public string resultCode { get; set; }
+        public string searchCity { get; set; }
+        public string searchLat { get; set; }
+        public string searchLon { get; set; }
+        public string searchState { get; set; }
+        public string searchType { get; set; }
+        public string searchZip { get; set; }
+        public int totalAvailable { get; set; }
+        public string trackingRequestURL{ get; set; }
+        public string ypcAttribution { get; set; }
+
         public RelatedCategories RelatedCategories {get;set;}
     }
 
@@ -53,7 +69,6 @@ namespace LeadGen.Models
         public string PrimaryCategory { get; set; }
         public string MoreInfoUrl { get; set; }
         public string ListingId { get; set; }
-
         public string Website { get; set; }
     }
 }

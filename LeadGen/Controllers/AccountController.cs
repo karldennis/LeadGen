@@ -1,36 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using System.Web.Security;
+using LeadGen.Core;
 using LeadGen.Models;
 
 namespace LeadGen.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : ControllerBase
     {
 
-        //
-        // GET: /Account/LogOn
 
-        public ActionResult LogOn()
+        public ActionResult Login()
         {
             return View();
         }
 
-        //
-        // POST: /Account/LogOn
-
         [HttpPost]
-        public ActionResult LogOn(LogOnModel model, string returnUrl)
+        public ActionResult Login(LogOnModel model, string returnUrl)
         {
             if (ModelState.IsValid)
             {
-                if (Membership.ValidateUser(model.UserName, model.Password))
+                var encryped = Encrypt(model.Password);
+                var user = RavenSession.Query<User>().FirstOrDefault(@u => @u.Email == model.Email && @u.Password == encryped);
+
+                if (user != null )
                 {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
+                    FormsAuthentication.SetAuthCookie(user.Id.ToString(), model.RememberMe);
                     if (Url.IsLocalUrl(returnUrl) && returnUrl.Length > 1 && returnUrl.StartsWith("/")
                         && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\"))
                     {
@@ -54,7 +50,7 @@ namespace LeadGen.Controllers
         //
         // GET: /Account/LogOff
 
-        public ActionResult LogOff()
+        public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
 
@@ -69,35 +65,30 @@ namespace LeadGen.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Register
+
 
         [HttpPost]
         public ActionResult Register(RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if(model.InviteKey != "invited")
             {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, null, null, true, null, out createStatus);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, false /* createPersistentCookie */);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                }
+                ModelState.AddModelError("InviteKey", "Sorry, we are in closed beta, you have to have the right invite key to be allowed access to the service.");
             }
 
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
+            if (!ModelState.IsValid)
+                return View(model);
+            
+            var user = new User
+                            {
+                                Email = model.Email,
+                                Password = Encrypt(model.Password)
+                            };
 
-        //
-        // GET: /Account/ChangePassword
+            RavenSession.Store(user);
+            RavenSession.SaveChanges();
+
+            return RedirectToAction("Login", "Account");
+        }
 
         [Authorize]
         public ActionResult ChangePassword()
@@ -105,18 +96,12 @@ namespace LeadGen.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/ChangePassword
-
         [Authorize]
         [HttpPost]
         public ActionResult ChangePassword(ChangePasswordModel model)
         {
             if (ModelState.IsValid)
             {
-
-                // ChangePassword will throw an exception rather
-                // than return false in certain failure scenarios.
                 bool changePasswordSucceeded;
                 try
                 {
@@ -148,6 +133,20 @@ namespace LeadGen.Controllers
         public ActionResult ChangePasswordSuccess()
         {
             return View();
+        }
+
+        public static string Encrypt(string sPassword)
+        {
+            var x = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            byte[] bs = System.Text.Encoding.UTF8.GetBytes(sPassword);
+            bs = x.ComputeHash(bs);
+            var s = new System.Text.StringBuilder();
+            foreach (byte b in bs)
+            {
+                s.Append(b.ToString("x2").ToUpper());
+            }
+
+            return s.ToString();
         }
 
         #region Status Codes

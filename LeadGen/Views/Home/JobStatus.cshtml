@@ -1,0 +1,12 @@
+﻿@model System.Collections.Generic.List<string>
+
+@{
+    ViewBag.Title = "title";
+    
+}
+
+<h2>Listing Q</h2>
+
+@foreach( var q in Model){
+    <p>@q</p>
+}

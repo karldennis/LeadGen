@@ -1,0 +1,36 @@
+﻿@model LeadGen.Core.LeadSearch
+
+@{
+    ViewBag.Title = "Lead Search Details";
+}
+
+<h2>Lead Search Details</h2>
+
+@if (Model.Leads != null )
+{
+    <table>
+        <thead><tr>
+                    <th>Industry</th><th>Name</th><th>Email</th><th>Phone</th><th>Website</th><th>YP Page</th></tr></thead>
+        <tbody>
+
+            @foreach (var listing in Model.Leads)
+            {
+            <tr>
+                <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
+                <td data-bind="text: BusinessName">@listing.BusinessName</td>
+                <td data-bind="text: Email">@string.Join(",", listing.Emails) </td>
+                <td data-bind="text: Phone">@listing.Phone</td>
+                <td>
+                @foreach (var website in listing.Websites)
+                {
+                    <a href="@website"target="_blank">@website</a><br />
+                }
+                </td>
+                <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
+                
+            </tr>
+            }
+        
+        </tbody>
+    </table>
+}

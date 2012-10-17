@@ -1,0 +1,30 @@
+﻿@model System.Collections.Generic.IEnumerable<LeadGen.Core.LeadSearch>
+
+@{
+    
+}
+
+@if(Model != null && Model.Any())
+{
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Term</th>
+            <th>Location</th>
+            <th>Radius</th>
+            <th>Total Found</th>
+            <th>Status</th>
+        </thead>
+        @foreach( var ls in Model )
+        {
+            <tr>
+                <td>@ls.Name</td>
+                <td>@ls.Terms</td>
+                <td>@ls.Radius</td>
+                <td>@ls.Location</td>
+                <td></td>
+                <td></td>
+            </tr>
+        }
+    </table>
+}
