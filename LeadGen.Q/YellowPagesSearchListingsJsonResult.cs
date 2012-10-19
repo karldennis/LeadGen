@@ -18,23 +18,39 @@ namespace LeadGen.Models
     public class SearchResult
     {
         private MetaProperties _metaProperties;
+        private SearchListings _searchListings;
+
         public MetaProperties MetaProperties
         {
             get { return _metaProperties ?? (_metaProperties = new MetaProperties()); }
             set { _metaProperties = value; }
         }
 
-        public SearchListings SearchListings { get; set; }
+        public SearchListings SearchListings
+        {
+            get { return _searchListings ?? ( _searchListings = new SearchListings()); }
+            set { _searchListings = value; }
+        }
     }
 
     public class SearchListings
     {
-        public List<SearchListing> SearchListing { get; set; }
+        private List<SearchListing> _searchListing;
+        public List<SearchListing> SearchListing
+        {
+            get { return _searchListing ?? ( _searchListing = new List<SearchListing>()); }
+            set { _searchListing = value; }
+        }
     }
 
     public class RelatedCategories
     {
-        public List<RelatedCategory> RelatedCategory { get; set; }
+        private List<RelatedCategory> _relatedCategory;
+        public List<RelatedCategory> RelatedCategory
+        {
+            get { return _relatedCategory ?? (_relatedCategory = new List<RelatedCategory>()); }
+            set { _relatedCategory = value; }
+        }
     }
 
     public class RelatedCategory
@@ -53,7 +69,7 @@ namespace LeadGen.Models
         public string searchState { get; set; }
         public string searchType { get; set; }
         public string searchZip { get; set; }
-        public int totalAvailable { get; set; }
+        public string totalAvailable { get; set; }
         public string trackingRequestURL{ get; set; }
         public string ypcAttribution { get; set; }
 
@@ -70,5 +86,9 @@ namespace LeadGen.Models
         public string MoreInfoUrl { get; set; }
         public string ListingId { get; set; }
         public string Website { get; set; }
+        public string Zip { get; set;}
+        public string State { get; set; }
+        public string City { get; set; }
+        public string Street { get; set; }
     }
 }

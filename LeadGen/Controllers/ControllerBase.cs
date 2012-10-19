@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using LeadGen.Core;
 using Raven.Client;
 
-namespace LeadGen.Controllers
+namespace LeadGen.Web.Controllers
 {
     public class ControllerBase : Controller
     {
 
-  
+
 
         public User CurrentUser
         {
-            get { return User.Identity.IsAuthenticated ? RavenSession.Query<User>().FirstOrDefault(u => u.Email == User.Identity.Name) : null; }
+            get { return RavenSession.Load<User>("users/" + User.Identity.Name); }
         }
 
         public IDocumentSession RavenSession { get; protected set; }

@@ -4,8 +4,9 @@ using System.Web.Mvc;
 using System.Web.Security;
 using LeadGen.Core;
 using LeadGen.Models;
+using LeadGen.Web.Models;
 
-namespace LeadGen.Controllers
+namespace LeadGen.Web.Controllers
 {
     public class AccountController : ControllerBase
     {

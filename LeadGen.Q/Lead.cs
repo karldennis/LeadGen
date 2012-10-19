@@ -54,6 +54,13 @@ namespace LeadGen.Core
         }
 
         public bool WebsiteScraped { get; set; }
+
+        public string Address { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
+        public string Zip { get; set; }
+
+        public string Street { get; set; }
     }
 
     public class User
@@ -104,23 +111,43 @@ namespace LeadGen.Core
         {
             get
             {
-                if (Leads.All(@l => @l.WebsiteScraped))
+                if (WebsitesScraped())
                 {
-                    return "Website Scrapped";
+                    return "3 of 3";
                 }
 
-                if( Leads.All(@l => @l.DetailsScrapped ))
+                if (DetailsScraped())
                 {
-                    return "Details Scrapped";
+                    return "2 of 3";
                 }
 
-                if( Leads.Count == this.ListingsFound )
+                if( ListingsScraped() )
                 {
-                    return "Listings Found";
+                    return "1 of 3";
                 }
 
-                return "Unknown";
+                return "Not started";
             }
+        }
+
+        public bool Finished
+        {
+            get { return WebsitesScraped() && DetailsScraped() && ListingsScraped(); }
+        }
+
+        private bool ListingsScraped()
+        {
+            return Leads.Count == this.ListingsFound;
+        }
+
+        private bool DetailsScraped()
+        {
+            return Leads.Any() && Leads.All(@l => @l.DetailsScrapped);
+        }
+
+        private bool WebsitesScraped()
+        {
+            return Leads.Any() && Leads.All(@l => @l.WebsiteScraped);
         }
 
         public int ListingsFound { get; set; }

@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
 using LeadGen.Core;
-using LeadGen.Http;
-using LeadGen.Models;
 using LeadGen.Q;
-using Microsoft.ServiceBus;
 using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Microsoft.WindowsAzure.StorageClient;
 using Raven.Client;
@@ -42,8 +37,19 @@ namespace LeadGen.Scraper
 
                     var message = queue.GetMessage();
 
+                    if( message == null )
+                    {
+                        return;
+                    }
+
                     var leadSearch = RavenSession.Load<LeadSearch>("leadsearches/" + message.AsString);
                     
+                    if( leadSearch == null )
+                    {
+                        queue.DeleteMessage(message);
+                        return;
+                    }
+
                     FindListings(leadSearch);
 
                     FindListingDetails(leadSearch);
@@ -120,7 +126,7 @@ namespace LeadGen.Scraper
 
             var yellowPagesSearchListingsJsonResult = ypApi.SearchListings(leadSearch.Location, leadSearch.Terms, leadSearch.Radius, leadSearch.YpPagesScraped);
 
-            while (leadSearch.Leads.Count < yellowPagesSearchListingsJsonResult.SearchResult.MetaProperties.totalAvailable)
+            while (leadSearch.Leads.Count < Convert.ToInt32(yellowPagesSearchListingsJsonResult.SearchResult.MetaProperties.totalAvailable))
             {
                 if (yellowPagesSearchListingsJsonResult.SearchResult.SearchListings != null)
                 {
@@ -148,7 +154,7 @@ namespace LeadGen.Scraper
             }
 
             //jobs done?
-            if (leadSearch.Leads.Count == yellowPagesSearchListingsJsonResult.SearchResult.MetaProperties.totalAvailable)
+            if (leadSearch.Leads.Count == Convert.ToInt32(yellowPagesSearchListingsJsonResult.SearchResult.MetaProperties.totalAvailable))
             {
                 RavenSession.SaveChanges();
             }
@@ -168,25 +174,10 @@ namespace LeadGen.Scraper
             // Create the queue client
             Client = storageAccount.CreateCloudQueueClient();
             CloudQueue queue = Client.GetQueueReference("listingsearch");
-
+            
             // Create the queue if it doesn't already exist
             queue.CreateIfNotExist();
-
-           
-
-            //// Create the queue client
-            //CloudQueueClient queueClient = storageAccount.CreateCloudQueueClient();
-
-            //// Create the queue if it does not exist already
-            //string connectionString = CloudConfigurationManager.GetSetting("LeadgenQueue");
-            //var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
-            //if (!namespaceManager.QueueExists(QueueName))
-            //{
-            //    namespaceManager.CreateQueue(QueueName);
-            //}
-
-            // Initialize the connection to Service Bus Queue
-            //Client = QueueClient.CreateFromConnectionString(connectionString, QueueName);
+            
             IsStopped = false;
             return base.OnStart();
         }

@@ -4,9 +4,11 @@
     
 }
 
+<h2>Saved Searches</h2>
+
 @if(Model != null && Model.Any())
 {
-    <table>
+    <table style="width: 100%" class="table table-striped table-condensed">
         <thead>
             <th>Name</th>
             <th>Term</th>
@@ -14,6 +16,8 @@
             <th>Radius</th>
             <th>Total Found</th>
             <th>Status</th>
+            <th>Finished?</th>
+            <th>Details and Export</th>
         </thead>
         @foreach( var ls in Model )
         {
@@ -22,8 +26,13 @@
                 <td>@ls.Terms</td>
                 <td>@ls.Radius</td>
                 <td>@ls.Location</td>
-                <td></td>
-                <td></td>
+                <td>@ls.ListingsFound</td>
+                <td>@ls.Status</td>
+                <td>@ls.Finished</td>
+                <td>@if( ls.Finished )
+                    {
+                        @Html.ActionLink("Details", "LeadSearch", "ScrapingJob", new {id = ls.Id}, null);
+                    }</td>
             </tr>
         }
     </table>

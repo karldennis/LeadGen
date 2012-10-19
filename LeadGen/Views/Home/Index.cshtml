@@ -1,58 +1,12 @@
-﻿@model LeadGen.Models.SearchViewModel
+﻿@model dynamic
+
 @{
-    ViewBag.Title = "Home Page";
+    ViewBag.Title = "title";
 }
 
-
-
-@Html.ValidationSummary()
-
-<h3>Search Criteria:</h3>
-<form action="/" class="form-inline" method="post">
-    <input type="text" name="terms" placeholder="search term/industy (ex: florists)" value="@Model.Terms"/>
-    <input type="text" name="location" placeholder="location (zip or city,state)" value="@Model.Location"/>
-    <input type="text" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
-    <input type="submit" value="Preview" class="btn"/>
-</form>
-
-
-@using (Html.BeginForm("CreateJob", "Home", FormMethod.Post, new {@class="form-inline"}))
-{
-    <input type="text" name="name" placeholder="optional name" />
-    <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>
-    <input type="hidden" name="location" placeholder="location" value="@Model.Location"/>
-    <input type="hidden" name="listingsfound" placeholder="location" value="@Model.ListingsFound"/>
-    <input type="hidden" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
-    <input  type="submit" 
-            value="@(Model.Leads != null && Model.Leads.Any() ? "Create Job" : "Unable to create a job without any results!")" 
-            class="btn @(Model.Leads != null && Model.Leads.Any() ? "" : "disabled")"/>
-}
-
-<p></p>
-
-@if (Model.Leads != null && Model.Leads.Any())
-{
-    <div class="alert alert-info">
-        @Model.ListingsFound potential leads found, click create a job to start the scraping process.  
-    </div>
-    
-    <table style="width: 100%">
-        <thead><tr>
-                    <th>Industry</th><th>Name</th><th>Phone</th><th>YP Page</th>
-                </tr></thead>
-        <tbody>
-
-            @foreach (var listing in Model.Leads)
-            {
-            <tr>
-                <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
-                <td data-bind="text: BusinessName">@listing.BusinessName</td>
-                <td data-bind="text: Phone">@listing.Phone</td>
-                <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
-                
-            </tr>
-            }
-        
-        </tbody>
-    </table>
-}
+<div class="hero-unit">
+        <h1>Lead Scrapper makes idea extraction and customer validation easier for startups.</h1>
+    <p>We grab business information from Yellow pages and then perform additional scraping to get you contact information about the industries you search for. </p>
+    <p>Currently in alpha mode!</p>
+        <p><a class="btn btn-primary btn-large" href="@Url.Action("Register", "Account")">Register »</a> or <a class="btn btn-primary btn-large" href="@Url.Action("Login", "Account")">Login »</a></p>
+      </div>

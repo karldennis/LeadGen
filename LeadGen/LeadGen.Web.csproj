@@ -10,8 +10,8 @@
     <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LeadGen</RootNamespace>
-    <AssemblyName>LeadGen</AssemblyName>
+    <RootNamespace>LeadGen.Web</RootNamespace>
+    <AssemblyName>LeadGen.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
@@ -105,11 +105,13 @@
     <Compile Include="Application\Class1.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
+    <Compile Include="Controllers\ScrapingJobController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Class1.cs" />
     <Compile Include="Models\Lead.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -190,8 +192,8 @@
     <Content Include="Views\Account\ChangePasswordSuccess.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\ScrapingJob\About.cshtml" />
+    <Content Include="Views\ScrapingJob\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LogOnPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
@@ -206,9 +208,10 @@
   <ItemGroup>
     <None Include="Properties\PublishProfiles\ypleadgen - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ypleadgen - Web Deploy.pubxml" />
-    <Content Include="Views\Home\JobStatus.cshtml" />
-    <Content Include="Views\Home\LeadSearch.cshtml" />
-    <Content Include="Views\Home\Searches.cshtml" />
+    <Content Include="Views\ScrapingJob\JobStatus.cshtml" />
+    <Content Include="Views\ScrapingJob\LeadSearch.cshtml" />
+    <Content Include="Views\ScrapingJob\Searches.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeadGen.Q\LeadGen.Core.csproj">

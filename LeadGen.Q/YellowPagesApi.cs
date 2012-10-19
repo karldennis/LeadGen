@@ -3,7 +3,7 @@ using System.Net;
 using LeadGen.Models;
 using Newtonsoft.Json;
 
-namespace LeadGen.Http
+namespace LeadGen.Core
 {
     public class YellowPagesApi
     {
@@ -62,30 +62,6 @@ namespace LeadGen.Http
             response.Close();
 
             var result = JsonConvert.DeserializeObject<YellowPagesSearchListingsJsonResult>(responseFromServer);
-
-            //foreach (var business in result.SearchResult.SearchListings.SearchListing)
-            //{
-                //var details = GetDetails(business.ListingId);
-
-                //foreach (var detail in details.ListingsDetailsResult.ListingsDetails.ListingDetail)
-                //{
-                //    business.Email = string.Join(",", (detail.ExtraEmails ?? new ExtraEmails()).ExtraEmail ?? new List<string>());
-
-                //    var websiteUrls = (detail.ExtraWebsiteUrls ?? new ExtraWebsiteUrls()).CleanedUrls() ?? new List<string>();
-                //    business.Website = string.Join(",", websiteUrls);
-
-                    //foreach (var url in websiteUrls)
-                    //{
-                    //    var foundEmail = ScrapePageForEmail(url);
-
-                    //    if (string.IsNullOrWhiteSpace(business.Email) && !string.IsNullOrWhiteSpace(foundEmail))
-                    //    {
-                    //        business.Email = "*" + foundEmail;
-                    //    }
-
-                    //}
-              //  }
-            //}
 
             return result;
         }
