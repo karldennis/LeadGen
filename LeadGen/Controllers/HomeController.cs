@@ -19,5 +19,10 @@ namespace LeadGen.Web.Controllers
             return View();
         }
 
+        public ActionResult Help()
+        {
+            return View();
+        }
+
     }
 }
