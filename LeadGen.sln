@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeadGen.Web", "LeadGen\LeadGen.Web.csproj", "{343F7403-9393-4348-8C68-3C9F67C80B66}"
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "LeadGen.Azure", "LeadGen.Azure\LeadGen.Azure.ccproj", "{BDF952BC-47AA-44F6-BFD0-0F608AC891BD}"
