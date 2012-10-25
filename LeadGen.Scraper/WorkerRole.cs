@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -13,10 +14,27 @@ using Raven.Client.Document;
 
 namespace LeadGen.Scraper
 {
+    public static class Timer
+    {
+        public static long Measure( Action action, Action<long> callback )
+        {
+            var sw = new Stopwatch();
+
+            sw.Reset();
+            sw.Start();
+            
+            action();
+            
+            sw.Stop();
+
+            callback(sw.ElapsedMilliseconds);
+
+            return sw.ElapsedMilliseconds;
+        }
+    }
+
     public class WorkerRole : RoleEntryPoint
     {
-        // The name of your queue
-        const string QueueName = "leadgen";
 
         // QueueClient is thread-safe. Recommended that you cache 
         // rather than recreating it on every request
@@ -50,11 +68,12 @@ namespace LeadGen.Scraper
                         return;
                     }
 
-                    FindListings(leadSearch);
+                    leadSearch.FindListingsStarted = true;
+                    Timer.Measure( () =>FindListings(leadSearch), (time) => leadSearch.FindListingsDuration = time);
 
-                    FindListingDetails(leadSearch);
+                    //Timer.Measure( () =>FindListingDetails(leadSearch), (time) => leadSearch.FindListingDetailsDuration = time);
 
-                    ScrapWebsitesForContactInformation(leadSearch);
+                    //Timer.Measure( () =>ScrapWebsitesForContactInformation(leadSearch), (time) => leadSearch.ScrapeWebsitesForContactInformationDuration = time);
 
                     queue.DeleteMessage(message);
                 //}
@@ -89,6 +108,12 @@ namespace LeadGen.Scraper
 
                     lead.Emails.AddRange(scrappedPage.MailToTargets);
                     lead.ContactUsUris.AddRange(scrappedPage.ContactUsUris);
+
+                    if( scrappedPage.MailToTargets.Any() )
+                    {
+                        lead.FoundEmailsFromWebsite = true;
+                    }
+
                 }
 
                 foreach (var contactUsUri in lead.ContactUsUris)

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LeadGen.Core
@@ -61,6 +62,8 @@ namespace LeadGen.Core
         public string Zip { get; set; }
 
         public string Street { get; set; }
+
+        public bool FoundEmailsFromWebsite { get; set; }
     }
 
     public class User
@@ -73,6 +76,13 @@ namespace LeadGen.Core
 
     public class LeadSearch
     {
+        public LeadSearch()
+        {
+            FindListingsDuration = 0;
+            FindListingDetailsDuration = 0;
+            ScrapeWebsitesForContactInformationDuration = 0;
+        }
+
         private List<Lead> _leads;
         private int _ypPagesScraped;
         public int UserId { get; set; }
@@ -107,23 +117,24 @@ namespace LeadGen.Core
 
         public string Name { get; set; }
 
+        //returns step number
         public string Status
         {
             get
             {
                 if (WebsitesScraped())
                 {
-                    return "3 of 3";
+                    return "3";
                 }
 
                 if (DetailsScraped())
                 {
-                    return "2 of 3";
+                    return "2";
                 }
 
                 if( ListingsScraped() )
                 {
-                    return "1 of 3";
+                    return "1";
                 }
 
                 return "Not started";
@@ -151,5 +162,12 @@ namespace LeadGen.Core
         }
 
         public int ListingsFound { get; set; }
+
+        //ms
+        public long FindListingsDuration { get; set; }
+        public long FindListingDetailsDuration { get; set; }
+        public long ScrapeWebsitesForContactInformationDuration { get; set; }
+
+        public bool FindListingsStarted { get; set; }
     }
 }

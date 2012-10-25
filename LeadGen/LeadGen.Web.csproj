@@ -14,7 +14,7 @@
     <RootNamespace>LeadGen.Web</RootNamespace>
     <AssemblyName>LeadGen.Web</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <MvcBuildViews>false</MvcBuildViews>
+    <MvcBuildViews>true</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -130,7 +130,10 @@
     <Content Include="Content\css\bootstrap-responsive.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
+    <Content Include="Content\css\font-awesome-ie7.css" />
+    <Content Include="Content\css\font-awesome.css" />
     <Content Include="Content\css\StyleSheet1.css" />
+    <Content Include="Content\font\fontawesome-webfont.svg" />
     <Content Include="Content\img\absurdidad.png" />
     <Content Include="Content\img\glyphicons-halflings-white.png" />
     <Content Include="Content\img\glyphicons-halflings.png" />
@@ -212,9 +215,14 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Content\font\fontawesome-webfont.eot" />
+    <None Include="Content\font\fontawesome-webfont.ttf" />
+    <None Include="Content\font\fontawesome-webfont.woff" />
     <None Include="Properties\PublishProfiles\ypleadgen - FTP.pubxml" />
     <None Include="Properties\PublishProfiles\ypleadgen - Web Deploy.pubxml" />
     <Content Include="Views\ScrapingJob\JobStatus.cshtml" />

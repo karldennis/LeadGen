@@ -7,16 +7,22 @@
 
 @Html.ValidationSummary()
 
-<h3>Search Criteria:</h3>
-<form action="/" class="form-inline" method="post">
-    <input type="text" name="terms" placeholder="search term/industy (ex: florists)" value="@Model.Terms"/>
-    <input type="text" name="location" placeholder="location (zip or city,state)" value="@Model.Location"/>
-    <input type="text" name="radius" placeholder="mile radius, max 25 miles" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
-    <input type="submit" value="Preview" class="btn"/>
-</form>
+<h3>Create a new Lead Scraping Job:</h3>
+<p>Search for potential customers or leads.  We first give you a preview of the results, if the results are the kind of data
+you are looking for click "create job" which then triggers our robots to go out and find the information you are looking for.</p>
+
+@using (Html.BeginForm("Index", "ScrapingJob", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <form action="/" class="form-inline" method="post">
+        <input type="text" name="terms" placeholder="search term/industry (ex: florists)" value="@Model.Terms"/>
+        <input type="text" name="location" placeholder="location (zip or city,state)" value="@Model.Location"/>
+        <input type="text" name="radius" placeholder="mile radius, max 25 miles" value="@( Model.Radius == 0 ? "" : Model.Radius.ToString())"/>
+        <input type="submit" value="Preview" class="btn"/>
+    </form>
+}
 
 
-@using (Html.BeginForm("CreateJob", "Home", FormMethod.Post, new {@class="form-inline"}))
+@using (Html.BeginForm("CreateJob", "ScrapingJob", FormMethod.Post, new {@class="form-inline"}))
 {
     <input type="text" name="name" placeholder="optional name" />
     <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>

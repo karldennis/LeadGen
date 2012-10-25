@@ -14,25 +14,35 @@
             <th>Term</th>
             <th>Location</th>
             <th>Radius</th>
-            <th>Total Found</th>
+            <th>Total</th>
             <th>Status</th>
-            <th>Finished?</th>
-            <th>Details and Export</th>
         </thead>
         @foreach( var ls in Model )
         {
             <tr>
                 <td>@ls.Name</td>
                 <td>@ls.Terms</td>
-                <td>@ls.Radius</td>
                 <td>@ls.Location</td>
+                <td>@ls.Radius</td>
                 <td>@ls.ListingsFound</td>
-                <td>@ls.Status</td>
-                <td>@ls.Finished</td>
-                <td>@if( ls.Finished )
+                <td>
+                    @if( ls.Finished )
                     {
-                        @Html.ActionLink("Details", "LeadSearch", "ScrapingJob", new {id = ls.Id}, null);
-                    }</td>
+                        <i  class="icon-ok icon-" style="color: #08C "> </i>
+                        @Html.ActionLink("Finished", "LeadSearch", "ScrapingJob", new {id = ls.Id}, null);
+                    } else if ( ls.FindListingsStarted )
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 40%;"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <em style="color: #666">Not Started</em>
+                    }
+                    
+
+                </td>
             </tr>
         }
     </table>
