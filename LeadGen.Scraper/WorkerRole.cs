@@ -71,9 +71,11 @@ namespace LeadGen.Scraper
                     leadSearch.FindListingsStarted = true;
                     Timer.Measure( () =>FindListings(leadSearch), (time) => leadSearch.FindListingsDuration = time);
 
-                    //Timer.Measure( () =>FindListingDetails(leadSearch), (time) => leadSearch.FindListingDetailsDuration = time);
+                    leadSearch.FindDetailsStarted = true;
+                    Timer.Measure( () =>FindListingDetails(leadSearch), (time) => leadSearch.FindListingDetailsDuration = time);
 
-                    //Timer.Measure( () =>ScrapWebsitesForContactInformation(leadSearch), (time) => leadSearch.ScrapeWebsitesForContactInformationDuration = time);
+                    leadSearch.ScrapeWebsiteStarted = true;
+                    Timer.Measure( () =>ScrapWebsitesForContactInformation(leadSearch), (time) => leadSearch.ScrapeWebsitesForContactInformationDuration = time);
 
                     queue.DeleteMessage(message);
                 //}

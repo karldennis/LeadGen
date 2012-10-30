@@ -6,6 +6,11 @@
 
 <h2>Saved Searches</h2>
 
+<style>
+    .progress { margin-bottom: 0px; }
+
+</style>
+
 @if(Model != null && Model.Any())
 {
     <table style="width: 100%" class="table table-striped table-condensed">
@@ -30,10 +35,21 @@
                     {
                         <i  class="icon-ok icon-" style="color: #08C "> </i>
                         @Html.ActionLink("Finished", "LeadSearch", "ScrapingJob", new {id = ls.Id}, null);
+                    }else if ( ls.ScrapeWebsiteStarted )
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 100%;"></div>
+                        </div>
+                    }
+                    else if ( ls.FindDetailsStarted )
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 67%;"></div>
+                        </div>
                     } else if ( ls.FindListingsStarted )
                     {
                         <div class="progress progress-striped active">
-                            <div class="bar" style="width: 40%;"></div>
+                            <div class="bar" style="width: 33%;"></div>
                         </div>
                     }
                     else

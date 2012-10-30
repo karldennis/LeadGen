@@ -9,18 +9,22 @@
     <h2>@Model.Name ( @Model.Leads.Count )</h2>
     
     <div class="pull-right">
-        <form action="@Url.Action("AsCsv")">
-        <input type="checkbox" name="justwithemail" id="justwithemail"/> Export only emails
-        <input type="submit" class="btn pull-right" value="Export to CSV" >  <i class="icon-cog"></i> </input>
+        <form action="@Url.Action("AsCsv")" method="POST">
+            @Html.HiddenFor(l=>l.Id)
+             <button type="submit" class="btn" >  <i class="icon-cog"></i> Export to CSV</button>
+               <label class="checkbox" style="font: 11px">
+            <input type="checkbox" name="onlyEmail" value="true" /> only leads w/emails
+            </label>    
         </form>
     </div>
-
-    <ul>
-        <li><strong>Terms:</strong> @Model.Terms<br /></li>
-        <li><strong>Location:</strong> @Model.Location<br /></li>
-        <li><strong>Radius:</strong> @Model.Radius<br /></li>
-        <li><strong>Status:</strong> @Model.Status </li>
-    </ul>
+    
+    <div>
+        <ul>
+            <li><strong>Terms:</strong> @Model.Terms<br /></li>
+            <li><strong>Location:</strong> @Model.Location<br /></li>
+            <li><strong>Radius:</strong> @Model.Radius<br /></li>
+        </ul>
+    </div>
     
     
 </div>
@@ -28,9 +32,10 @@
 @if (Model.Leads != null )
 {
     <style>td { font-size: 12px; }</style>
+    <em><i class="icon-bolt" style="color: #fc0"></i> = emails found with extra scraping</em>
     <table class="table table-striped">
         <thead><tr>
-                    <th>Industry</th><th>Name</th><th>Email</th><th>Phone</th><th>Website</th><th>YP Page</th></tr></thead>
+                    <th>Industry</th><th>Name</th><th>Email</th><th></th><th>Phone</th><th>Website</th><th>YP</th></tr></thead>
         <tbody>
 
             @foreach (var listing in Model.Leads)
@@ -39,12 +44,13 @@
                 <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
                 <td data-bind="text: BusinessName">@listing.BusinessName</td>
                 <td data-bind="text: Email">@Html.Raw(string.Join("<br />", listing.Emails ?? new List<string>())) </td>
+                <td>@Html.Raw(listing.FoundEmailsFromWebsite ? "<i class=icon-bolt style=\"color: #fc0\"></i>" : "")</td>
                 <td data-bind="text: Phone">@listing.Phone</td>
                 <td>
-                @foreach (var website in listing.Websites ?? new List<string>() )
-                {
-                    <a href="@website"target="_blank">@website</a><br />
-                }
+                    @foreach (var website in listing.Websites ?? new List<string>() )
+                    {
+                        <a href="@website"target="_blank">@website</a><br />
+                    }
                 </td>
                 <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
                 

@@ -100,13 +100,21 @@ namespace LeadGen.Web.Controllers
             return View(leadSearch);
         }
 
-        public ActionResult AsCsv(int id)
+        [HttpPost]
+        public ActionResult AsCsv(int id, bool? onlyEmail)
         {
             var leadSearch = RavenSession.Load<Core.LeadSearch>("leadsearches/" + id);
 
             var csvLeads = new List<CsvLead>();
 
-            foreach( var lead in leadSearch.Leads )
+            var leads = leadSearch.Leads;
+
+            if( onlyEmail.HasValue && onlyEmail == true )
+            {
+                leads = leads.Where(l => l.Emails.Any()).ToList();
+            }
+
+            foreach( var lead in leads )
             {
                 var csvLead = new CsvLead()
                                   {

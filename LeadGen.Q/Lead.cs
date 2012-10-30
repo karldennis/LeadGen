@@ -169,5 +169,9 @@ namespace LeadGen.Core
         public long ScrapeWebsitesForContactInformationDuration { get; set; }
 
         public bool FindListingsStarted { get; set; }
+
+        public bool FindDetailsStarted { get; set; }
+
+        public bool ScrapeWebsiteStarted { get; set; }
     }
 }
