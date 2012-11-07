@@ -72,6 +72,10 @@ namespace LeadGen.Core
         public string Email { get; set; }
 
         public string Password { get; set; }
+
+        public string LinkedInToken { get; set; }
+
+        public string LinkedInVerifier { get; set; }
     }
 
     public class LeadSearch

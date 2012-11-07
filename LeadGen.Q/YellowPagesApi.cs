@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using LeadGen.Models;
 using Newtonsoft.Json;
@@ -22,19 +23,27 @@ namespace LeadGen.Core
 
                 request.UserAgent = "Lead Gen Client";
 
-                // Get the response.
-                WebResponse response = request.GetResponse();
+                try
+                {
+                    // Get the response.
+                    WebResponse response = request.GetResponse();
 
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
+                    Stream dataStream = response.GetResponseStream();
+                    StreamReader reader = new StreamReader(dataStream);
+                    string responseFromServer = reader.ReadToEnd();
 
-                reader.Close();
-                response.Close();
+                    reader.Close();
+                    response.Close();
 
-                result = JsonConvert.DeserializeObject<YPListingDetailsJsonResultModel>(responseFromServer);
+                    result = JsonConvert.DeserializeObject<YPListingDetailsJsonResultModel>(responseFromServer);
 
-                result.Id = baseUrl;
+                    result.Id = baseUrl;
+
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
             }
 
             return result;
@@ -50,7 +59,10 @@ namespace LeadGen.Core
             var request = (HttpWebRequest)WebRequest.Create(baseUrl);
 
             request.UserAgent = "Lead Gen Client";
-
+            try
+            {
+                
+            
             // Get the response.
             WebResponse response = request.GetResponse();
 
@@ -62,8 +74,12 @@ namespace LeadGen.Core
             response.Close();
 
             var result = JsonConvert.DeserializeObject<YellowPagesSearchListingsJsonResult>(responseFromServer);
-
             return result;
+            }
+            catch(Exception)
+            {
+                return null;
+            }
         }
     }
 }

@@ -104,25 +104,32 @@ namespace LeadGen.Scraper
         {
             foreach( var lead in leadSearch.Leads.Where( l => !l.WebsiteScraped ) )
             {
-                foreach (var website in lead.Websites)
+                if (lead.Websites != null)
                 {
-                    var scrappedPage = new ScrappedPage(website);
 
-                    lead.Emails.AddRange(scrappedPage.MailToTargets);
-                    lead.ContactUsUris.AddRange(scrappedPage.ContactUsUris);
-
-                    if( scrappedPage.MailToTargets.Any() )
+                    foreach (var website in lead.Websites)
                     {
-                        lead.FoundEmailsFromWebsite = true;
-                    }
+                        var scrappedPage = new ScrappedPage(website);
 
+                        lead.Emails.AddRange(scrappedPage.MailToTargets);
+                        lead.ContactUsUris.AddRange(scrappedPage.ContactUsUris);
+
+                        if (scrappedPage.MailToTargets.Any())
+                        {
+                            lead.FoundEmailsFromWebsite = true;
+                        }
+
+                    }
                 }
 
-                foreach (var contactUsUri in lead.ContactUsUris)
+                if (lead.ContactUsUris != null)
                 {
-                    var scrappedPage = new ScrappedPage(contactUsUri);
+                    foreach (var contactUsUri in lead.ContactUsUris)
+                    {
+                        var scrappedPage = new ScrappedPage(contactUsUri);
 
-                    lead.Emails.AddRange(scrappedPage.MailToTargets);
+                        lead.Emails.AddRange(scrappedPage.MailToTargets);
+                    }
                 }
 
                 lead.WebsiteScraped = true;
@@ -138,10 +145,14 @@ namespace LeadGen.Scraper
             foreach( var lead in leadSearch.Leads.Where(l=>!l.DetailsScrapped) )
             {
                 var details = yp.GetDetails(lead.YpListingId);
-
-                lead.Websites = details.ListingsDetailsResult.ListingsDetails.ListingDetail[0].ExtraWebsiteUrls.CleanedUrls();
-                lead.Emails = details.ListingsDetailsResult.ListingsDetails.ListingDetail[0].ExtraEmails.ExtraEmail;
                 lead.DetailsScrapped = true;
+
+                if( details != null )
+                {
+                    lead.Websites = details.ListingsDetailsResult.ListingsDetails.ListingDetail[0].ExtraWebsiteUrls.CleanedUrls();
+                    lead.Emails = details.ListingsDetailsResult.ListingsDetails.ListingDetail[0].ExtraEmails.ExtraEmail;
+                }
+
             }
 
             RavenSession.SaveChanges();
