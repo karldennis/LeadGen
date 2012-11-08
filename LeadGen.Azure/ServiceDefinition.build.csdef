@@ -15,7 +15,6 @@
     </Imports>
     <ConfigurationSettings>
       <Setting name="LeadgenQueue" />
-      <Setting name="CloudToolsDiagnosticAgentVersion" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

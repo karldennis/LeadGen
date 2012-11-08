@@ -7,7 +7,7 @@
 
 @Html.ValidationSummary()
 
-<h3>Create a new Lead Scraping Job:</h3>
+<h3>Preview Results:</h3>
 <p>Search for potential customers or leads.  We first give you a preview of the results, if the results are the kind of data
 you are looking for click "create job" which then triggers our robots to go out and find the information you are looking for.</p>
 
@@ -22,17 +22,6 @@ you are looking for click "create job" which then triggers our robots to go out 
 }
 
 
-@using (Html.BeginForm("CreateJob", "ScrapingJob", FormMethod.Post, new {@class="form-inline"}))
-{
-    <input type="text" name="name" placeholder="optional name" />
-    <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>
-    <input type="hidden" name="location" placeholder="location" value="@Model.Location"/>
-    <input type="hidden" name="listingsfound" placeholder="location" value="@Model.ListingsFound"/>
-    <input type="hidden" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
-    <input  type="submit" 
-            value="@(Model.Leads != null && Model.Leads.Any() ? "Create Job" : "Unable to create a job without any results!")" 
-            class="btn @(Model.Leads != null && Model.Leads.Any() ? "" : "disabled")"/>
-}
 
 
 @if( Model.Leads == null || !Model.Leads.Any())
@@ -45,9 +34,29 @@ you are looking for click "create job" which then triggers our robots to go out 
 @if (Model.Leads != null && Model.Leads.Any())
 {
     <div class="alert alert-info">
+        <div class="row-fluid show-grid">
+              <div class="span6">
         @Model.ListingsFound potential leads found, click Create Job to start the scraping process.  
         <br />
         * Websites, Emails are found during the scraping process.  
+        </div>
+        <div class="span6">
+        
+        @using (Html.BeginForm("CreateJob", "ScrapingJob", FormMethod.Post, new {@class="form-inline"}))
+        {
+    
+            <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>
+            <input type="hidden" name="location" placeholder="location" value="@Model.Location"/>
+            <input type="hidden" name="listingsfound" placeholder="location" value="@Model.ListingsFound"/>
+            <input type="hidden" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
+    
+            <input type="text" name="name" placeholder="optional name" /><br />
+            <input  type="submit" 
+                    value="@(Model.Leads != null && Model.Leads.Any() ? "Create Job" : "Unable to create a job without any results!")" 
+                    class="btn btn-primary btn-large @(Model.Leads != null && Model.Leads.Any() ? "" : "disabled")"/>
+        }
+            </div>
+            </div>
     </div>
     
     <table style="width: 100%">
