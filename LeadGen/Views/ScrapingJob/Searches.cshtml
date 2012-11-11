@@ -31,31 +31,7 @@
                 <td>@ls.Radius</td>
                 <td>@ls.ListingsFound</td>
                 <td>
-                    @if( ls.Finished )
-                    {
-                        <i  class="icon-ok icon-" style="color: #08C "> </i>
-                        @Html.ActionLink("Finished", "LeadSearch", "ScrapingJob", new {id = ls.Id}, null);
-                    }else if ( ls.ScrapeWebsiteStarted )
-                    {
-                        <div class="progress progress-striped active">
-                            <div class="bar" style="width: 100%;"></div>
-                        </div>
-                    }
-                    else if ( ls.FindDetailsStarted )
-                    {
-                        <div class="progress progress-striped active">
-                            <div class="bar" style="width: 67%;"></div>
-                        </div>
-                    } else if ( ls.FindListingsStarted )
-                    {
-                        <div class="progress progress-striped active">
-                            <div class="bar" style="width: 33%;"></div>
-                        </div>
-                    }
-                    else
-                    {
-                        <em style="color: #666">Not Started</em>
-                    }
+                   @Html.Partial("LeadSearchStatusBar", ls)
                     
 
                 </td>

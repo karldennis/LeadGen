@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\Class1.cs" />
+    <Compile Include="Application\ControllerUserNotificationExtensions.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\ControllerBase.cs" />
@@ -234,6 +235,8 @@
     <Content Include="Views\ScrapingJob\Searches.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Help.cshtml" />
+    <Content Include="Views\ScrapingJob\PreviewResults.cshtml" />
+    <Content Include="Views\ScrapingJob\LeadSearchStatusBar.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeadGen.Q\LeadGen.Core.csproj">

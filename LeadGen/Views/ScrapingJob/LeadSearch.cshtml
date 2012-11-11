@@ -8,25 +8,31 @@
 
     <h2>@Model.Name ( @Model.Leads.Count )</h2>
     
-    <div class="pull-right">
-        <form action="@Url.Action("AsCsv")" method="POST">
-            @Html.HiddenFor(l=>l.Id)
-             <button type="submit" class="btn" >  <i class="icon-cog"></i> Export to CSV</button>
-               <label class="checkbox" style="font: 11px">
-            <input type="checkbox" name="onlyEmail" value="true" /> only leads w/emails
-            </label>    
-        </form>
+            <div class="row-fluid show-grid">
+            <div class="span6">
+                 <div class="alert alert-info">
+                     <strong>Current Scraping Status: </strong> 
+                     @Html.Partial("LeadSearchStatusBar", Model)
+                </div>
+            </div>
+            <div class="span3">
+                <p><strong>Your Search:</strong></p>
+                <ul>
+                    <li><strong>Terms:</strong> @Model.Terms<br /></li>
+                    <li><strong>Location:</strong> @Model.Location<br /></li>
+                    <li><strong>Radius:</strong> @Model.Radius<br /></li>
+                </ul>
+            </div>
+            <div class="span3">
+                <form action="@Url.Action("AsCsv")" method="POST">
+                    @Html.HiddenFor(l=>l.Id)
+                    <button type="submit" class="btn" >  <i class="icon-cog"></i> Export to CSV</button>
+                    <label class="checkbox" style="font: 11px">
+                        <input type="checkbox" name="onlyEmail" value="true" /> only leads w/emails
+                    </label>    
+                </form>
+            </div>
     </div>
-    
-    <div>
-        <ul>
-            <li><strong>Terms:</strong> @Model.Terms<br /></li>
-            <li><strong>Location:</strong> @Model.Location<br /></li>
-            <li><strong>Radius:</strong> @Model.Radius<br /></li>
-        </ul>
-    </div>
-    
-    
 </div>
 
 @if (Model.Leads != null )

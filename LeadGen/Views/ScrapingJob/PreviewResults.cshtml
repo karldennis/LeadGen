@@ -1,0 +1,68 @@
+﻿@model LeadGen.Models.SearchViewModel
+<h3>Step 2 of 2: Confirm</h3>
+
+@if( Model.Leads == null || !Model.Leads.Any())
+{
+    <div class="alert alert-block">
+        No leads were found.  Can't create a scraping job for you.  
+    </div>
+}
+
+@if (Model.Leads != null && Model.Leads.Any())
+{
+    
+        <div class="row-fluid show-grid">
+            <div class="span6">
+                 <div class="alert alert-info">
+                        <strong>@Model.ListingsFound</strong> potential leads found, click Create Job to start the scraping process.  <br />
+                        * Websites and emails are found during the scraping process.  
+                </div>
+            </div>
+            <div class="span3">
+                <p><strong>Your Search:</strong></p>
+                <ul>
+                    <li><strong>Terms:</strong> @Model.Terms<br /></li>
+                    <li><strong>Location:</strong> @Model.Location<br /></li>
+                    <li><strong>Radius:</strong> @Model.Radius<br /></li>
+                </ul>
+            </div>
+            <div class="span3">
+                @using (Html.BeginForm("CreateJob", "ScrapingJob", FormMethod.Post, new {@class="form-inline"}))
+                {
+                    <input type="hidden" name="terms" placeholder="search term" value="@Model.Terms"/>
+                    <input type="hidden" name="location" placeholder="location" value="@Model.Location"/>
+                    <input type="hidden" name="listingsfound" placeholder="location" value="@Model.ListingsFound"/>
+                    <input type="hidden" name="radius" placeholder="radius" value="@( Model.Radius == 0 ? 10 : Model.Radius)"/>
+    
+                    <input type="text" name="name" placeholder="optional name" /><br /><br />
+                    <input  type="submit" 
+                            value="@(Model.Leads != null && Model.Leads.Any() ? "Start the Scraping Process" : "Unable to create a job without any results!")" 
+                            class="btn btn-primary btn-large @(Model.Leads != null && Model.Leads.Any() ? "" : "disabled")"/>
+                }
+            </div>
+    </div>
+    
+    <h4>Result Preview</h4>
+    <table style="width: 100%">
+        <thead><tr>
+                    <th>Industry</th><th>Name</th><th>Phone</th><th>YP Page</th><th>Address</th>
+                </tr></thead>
+        <tbody>
+
+            @foreach (var listing in Model.Leads)
+            {
+            <tr>
+                <td data-bind="text: PrimaryCategory">@listing.PrimaryCategory</td>
+                <td data-bind="text: BusinessName">@listing.BusinessName</td>
+                <td data-bind="text: Phone">@listing.Phone</td>
+                <td><a href="@listing.MoreInfoUrl"target="_blank">More Info</a></td>
+                <td>
+                    @listing.Street<br />
+                    @listing.City, @listing.State @listing.Zip
+                </td>
+            </tr>
+            }
+        
+        </tbody>
+    </table>
+}

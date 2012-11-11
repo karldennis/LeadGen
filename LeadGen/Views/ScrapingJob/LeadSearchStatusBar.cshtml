@@ -1,0 +1,31 @@
+﻿ @model LeadGen.Core.LeadSearch
+ 
+ @if( Model.Finished )
+                    {
+                        <i  class="icon-ok icon-" style="color: #08C "> </i>
+                        @Html.ActionLink("Finished", "LeadSearch", "ScrapingJob", new {id = Model.Id}, null);
+                    }
+ else if (Model.ScrapeWebsiteStarted)
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 100%;"></div>
+                        </div>
+                    }
+ else if (Model.FindDetailsStarted)
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 67%;"></div>
+                        </div>
+                    }
+ else if (Model.FindListingsStarted)
+                    {
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: 33%;"></div>
+                        </div>
+                    }
+                    else
+                    {
+                        <em style="color: #666">Not Started</em><br />
+                        
+     
+                    }

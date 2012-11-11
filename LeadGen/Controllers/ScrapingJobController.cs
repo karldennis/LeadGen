@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using LeadGen.Application;
 using LeadGen.Core;
 using LeadGen.Models;
 using LeadGen.Q;
+using LeadGen.Web.Application;
 
 namespace LeadGen.Web.Controllers
 {
@@ -20,44 +20,54 @@ namespace LeadGen.Web.Controllers
         }
 
         [HttpPost]
-        public ViewResult Index(SearchViewModel postedModel)
+        public ActionResult Index(SearchViewModel postedModel)
         {
             if (!ModelState.IsValid)
                 return View(postedModel);
 
-            var searchResult = new YellowPagesApi().SearchListings(postedModel.Location, postedModel.Terms,postedModel.Radius, 1);
+            return RedirectToAction("PreviewResults", new {postedModel.Terms, postedModel.Location, postedModel.Radius});
+        }
+
+        public ActionResult PreviewResults(string terms, string location, int radius )
+        {
+            var searchResult = new YellowPagesApi().SearchListings(location, terms, radius, 1);
 
             var leads = new List<Lead>();
             foreach (var listing in searchResult.SearchResult.SearchListings.SearchListing)
             {
                 var lead = new Lead()
-                               {
-                                   BusinessName = listing.BusinessName,
-                                   BaseClickUrl = listing.BaseClickUrl,
-                                   MoreInfoUrl = listing.MoreInfoUrl,
-                                   Phone = listing.Phone,
-                                   PrimaryCategory = listing.PrimaryCategory,
-                                   YpListingId = listing.ListingId,
-                                   Street = listing.Street,
-                                   State = listing.State,
-                                   City = listing.City,
-                                   Zip = listing.Zip
+                {
+                    BusinessName = listing.BusinessName,
+                    BaseClickUrl = listing.BaseClickUrl,
+                    MoreInfoUrl = listing.MoreInfoUrl,
+                    Phone = listing.Phone,
+                    PrimaryCategory = listing.PrimaryCategory,
+                    YpListingId = listing.ListingId,
+                    Street = listing.Street,
+                    State = listing.State,
+                    City = listing.City,
+                    Zip = listing.Zip
 
-                               };
+                };
 
                 leads.Add(lead);
             }
 
+            var viewModel = new SearchViewModel();
+
+            viewModel.Terms = terms;
+            viewModel.Location = location;
+            viewModel.Radius = radius;
+
             if (leads.Any())
             {
-                postedModel.Leads = leads;
-                postedModel.ListingsFound = Convert.ToInt32(searchResult.SearchResult.MetaProperties.totalAvailable);
+                viewModel.Leads = leads;
+                viewModel.ListingsFound = Convert.ToInt32(searchResult.SearchResult.MetaProperties.totalAvailable);
             }
 
-            //RavenSession.SaveChanges();
-
-            return View(postedModel);
+            return View(viewModel);
         }
+
 
         [HttpPost]
         public ActionResult CreateJob(SearchViewModel postedModel)
@@ -83,7 +93,9 @@ namespace LeadGen.Web.Controllers
 
             new QueueManager().AddListingSearch(leadSearch.Id);
 
-            return RedirectToAction("Searches");
+            this.HighFive("Job created successfuly");
+
+            return RedirectToAction("LeadSearch", new {id=leadSearch.Id});
         }
 
         public ActionResult Searches()
@@ -96,7 +108,7 @@ namespace LeadGen.Web.Controllers
         public ActionResult LeadSearch(int id)
         {
             var leadSearch = RavenSession.Load<Core.LeadSearch>("leadsearches/" + id);
-
+            
             return View(leadSearch);
         }
 

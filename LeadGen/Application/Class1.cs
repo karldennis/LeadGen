@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
 
-namespace LeadGen.Application
+namespace LeadGen.Web.Application
 {
     public class CsvExport<T> where T : class
     {
